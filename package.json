@@ -1,8 +1,7 @@
 {
-  "name": "js-webpack-template",
+  "name": "weather-app",
   "version": "1.0.0",
-  "description": "A starter template for JavaScript projects using Webpack and GH-Pages.",
-  "private": true,
+  "description": "Weather App Project, from The Odin Project",
   "main": "index.js",
   "type": "module",
   "scripts": {
