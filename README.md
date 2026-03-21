@@ -1,1 +1,1 @@
-# template-repo-1
+Weather App Project, from The Odin Project
