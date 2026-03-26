@@ -103,7 +103,7 @@ body {
 .weather-info {
     width: 70vw;
     height: 300px;
-    background-color: rgb(37, 0, 32);
+    background-color: rgba(0, 23, 37, 0.7);
     padding: 10px 40px;
     margin-top: 20px;
     color: #fff;
