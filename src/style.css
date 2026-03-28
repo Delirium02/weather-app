@@ -101,6 +101,8 @@ body {
 }
 
 .weather-info {
+    display: flex;
+    flex-direction: column;
     width: 70vw;
     height: 300px;
     background-color: rgba(0, 23, 37, 0.7);
@@ -110,9 +112,28 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     text-align: center;
     border-radius: 10px;
+    gap: 10px;
 }
 
-.temp-display {
-    font-size: 24px;
+.weather-info>h2 {
     margin-top: 20px;
+}
+
+.weather-conditions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.weather-icon {
+    width: 30px;  /* Adjust this to whatever size looks good */
+    height: auto;
+    margin: 15px 0;
+    filter: invert(100%)
+}
+
+.temperature-display {
+    font-size: 24px;
+    margin-top: 10px;
 }
