@@ -7,22 +7,19 @@ const weatherInfo = document.querySelector(".weather-info");
 // Initially hide weather info section
 weatherInfo.classList.remove("weather-info");
 
+let currentWeatherData = null;
+
 async function fetchWeatherData(location) {
 	const response = await fetch(
 		`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=RX4APM5AGNAJYPE3LWW7AT5KD`,
 	);
 	const weatherData = await response.json();
 
-	console.log(weatherData);
 	return weatherData;
 }
 
 function toCelsius(f) {
 	return ((f - 32) * 5) / 9;
-}
-
-function toFahrenheit(c) {
-	return (c * 9) / 5 + 32;
 }
 
 function processData(weatherData) {
@@ -45,26 +42,30 @@ async function getIcon(iconName) {
 }
 
 async function displayData() {
-	
 	const locationInput = document.querySelector(".location-input").value;
+	if (!locationInput) return;
 
 	const rawData = await fetchWeatherData(locationInput);
-	const cleanData = processData(rawData);
+	currentWeatherData = processData(rawData);
 
-	const locationAddress = cleanData.locationAddress;
-	const conditions = cleanData.conditions;
-	let temperature;
+	renderWeatherData();
+}
+
+async function renderWeatherData() {
+	if (!currentWeatherData) return;
+	const { locationAddress, conditions, temperature, icon } = currentWeatherData;
+
+	let displayTemp;
 	let unit;
 
 	if (tempUnitSelector.value === "Celsius") {
-		temperature = toCelsius(cleanData.temperature).toFixed(0);
+		displayTemp = toCelsius(temperature).toFixed(0);
 		unit = "°C";
 	} else {
-		temperature = cleanData.temperature.toFixed(0);
+		displayTemp = temperature.toFixed(0);
 		unit = "°F";
 	}
 
-	const icon = cleanData.icon;
 	const iconUrl = await getIcon(icon);
 
 	weatherInfo.innerHTML = `<h2>${locationAddress.charAt(0).toUpperCase() + locationAddress.slice(1)}</h2>
@@ -72,11 +73,10 @@ async function displayData() {
 								${iconUrl ? `<img src="${iconUrl}" alt="${icon}" class="weather-icon">` : ""}
 								<p>Conditions: ${conditions}</p>
 							</div>
-							<p class="temperature-display">Current Temperature: ${temperature}${unit}</p>`;
-};
+							<p class="temperature-display">Current Temperature: ${displayTemp}${unit}</p>`;
 
-function renderWeatherData() {
-	
+	weatherInfo.classList.add("weather-info");
+	weatherInfo.classList.remove("display-none");
 }
 
 // Get Weather Button Event Listener
@@ -84,16 +84,8 @@ getWeatherBtn.addEventListener("click", (e) => {
 	e.preventDefault();
 
 	displayData();
-
-	weatherInfo.classList.add("weather-info");
-	weatherInfo.classList.remove("display-none");
 });
 
-function changeTempUnit() {
-	tempUnitSelector.addEventListener("change", () => {
-		displayData();
-	});
-}
-
-changeTempUnit();
-
+tempUnitSelector.addEventListener("change", () => {
+	renderWeatherData();
+});
